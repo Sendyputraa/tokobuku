@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BukuKita - Toko Buku Online</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b81;
+            --primary-dark: #ff4757;
+            --soft: #fff0f3;
+            --bg: #fafafa;
+            --text: #292929;
+            --gray: #777;
+            --white: #ffffff;
+            --border: #eeeeee;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* HEADER */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .top-header {
+            max-width: 1200px;
+            margin: auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: #333;
+        }
+
+        .search-box {
+            flex: 1;
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 14px;
+            background: transparent;
+            font-size: 14px;
+        }
+
+        .search-box button {
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 0 22px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -7px;
+            right: -8px;
+            background: var(--primary-dark);
+            color: white;
+            font-size: 10px;
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* NAV */
+
+        nav {
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            gap: 25px;
+            padding: 12px 20px;
+            overflow-x: auto;
+        }
+
+        .nav-content a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .nav-content a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* HERO */
+
+        .hero {
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        .hero-box {
+            min-height: 320px;
+            border-radius: 25px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(120deg, #ffe1e7, #fff8f9);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-text {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-text small {
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .hero-text h1 {
+            font-size: 44px;
+            line-height: 1.15;
+            margin: 12px 0;
+        }
+
+        .hero-text p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background: var(--primary-dark);
+            color: white;
+            padding: 13px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero-decoration {
+            position: absolute;
+            right: 70px;
+            font-size: 170px;
+            opacity: .12;
+        }
+
+        /* CATEGORY */
+
+        .section {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            font-size: 23px;
+        }
+
+        .section-title a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+
+        .category {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .category:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .category-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .category p {
+            font-size: 13px;
+        }
+
+        /* PRODUCT */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: .2s;
+            position: relative;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+        }
+
+        .product-image {
+            height: 220px;
+            background: linear-gradient(135deg, #ffe3e8, #f8f8f8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+        }
+
+        .wishlist {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: white;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .product-info {
+            padding: 14px;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        .rating {
+            margin: 8px 0;
+            font-size: 12px;
+            color: #f6b800;
+        }
+
+        .rating span {
+            color: #888;
+        }
+
+        .price {
+            color: var(--primary-dark);
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .old-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        .sold {
+            color: #888;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .add-cart {
+            width: 100%;
+            margin-top: 12px;
+            border: 1px solid var(--primary);
+            background: var(--soft);
+            color: var(--primary-dark);
+            padding: 9px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-cart:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* FLASH SALE */
+
+        .flash-sale {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .flash-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .flash-title h2 {
+            color: var(--primary-dark);
+        }
+
+        .timer {
+            background: #333;
+            color: white;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        /* CART */
+
+        .cart-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 400px;
+            max-width: 95%;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            box-shadow: -10px 0 30px rgba(0,0,0,.15);
+            transition: .3s;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-panel.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .close-cart {
+            border: none;
+            background: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-book {
+            width: 55px;
+            height: 70px;
+            background: #ffe5e9;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .cart-info {
+            flex: 1;
+        }
+
+        .cart-info h4 {
+            font-size: 13px;
+        }
+
+        .cart-info p {
+            color: var(--primary-dark);
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .remove {
+            border: none;
+            background: none;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .checkout {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* NOTIFICATION */
+
+        .notification {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 10px;
+            z-index: 3000;
+            transition: .3s;
+            font-size: 13px;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 60px;
+            background: #222;
+            color: white;
+            padding: 45px 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 30px;
+        }
+
+        footer h3 {
+            margin-bottom: 15px;
+        }
+
+        footer p,
+        footer a {
+            color: #aaa;
+            font-size: 13px;
+            line-height: 2;
+            text-decoration: none;
+        }
+
+        /* DARK MODE */
+
+        body.dark {
+            --bg: #151515;
+            --text: #eee;
+            --white: #222;
+            --border: #333;
+        }
+
+        body.dark header,
+        body.dark .product,
+        body.dark .category,
+        body.dark .flash-sale,
+        body.dark .cart-panel {
+            background: #222;
+        }
+
+        body.dark .search-box {
+            background: #333;
+        }
+
+        body.dark .search-box input {
+            color: white;
+        }
+
+        body.dark .hero-box {
+            background: linear-gradient(120deg,#3b2529,#252525);
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 900px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .top-header {
+                height: auto;
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .search-box {
+                order: 3;
+                flex-basis: 100%;
+            }
+
+            .hero-box {
+                padding: 30px;
+                min-height: 280px;
+            }
+
+            .hero-text h1 {
+                font-size: 31px;
+            }
+
+            .hero-decoration {
+                right: 20px;
+                font-size: 100px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .categories {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .category {
+                padding: 13px 5px;
+            }
+
+            .category-icon {
+                font-size: 24px;
+            }
+
+            .product-image {
+                height: 170px;
+                font-size: 60px;
+            }
+
+            .product-info {
+                padding: 10px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="top-header">
+
+        <div class="logo">
+            Buku<span>Kita</span>
+        </div>
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Cari buku, penulis, atau kategori..."
+                onkeyup="searchProduct()"
+            >
+            <button>🔍</button>
+        </div>
+
+        <div class="header-icons">
+
+            <button class="icon-btn" onclick="toggleDarkMode()">
+                🌙
+            </button>
+
+            <button class="icon-btn" onclick="openCart()">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+
+        </div>
+
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#">Beranda</a>
+            <a href="#produk">Semua Buku</a>
+            <a href="#kategori">Kategori</a>
+            <a href="#terlaris">Terlaris</a>
+            <a href="#">Promo</a>
+            <a href="#">Tentang Kami</a>
+        </div>
+    </nav>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-box">
+
+        <div class="hero-text">
+
+            <small>📚 TOKO BUKU ONLINE</small>
+
+            <h1>
+                Temukan Buku<br>
+                Favoritmu ✨
+            </h1>
+
+            <p>
+                Koleksi buku pilihan untuk menemani belajar,
+                membaca, dan mengembangkan diri.
+            </p>
+
+            <a href="#produk" class="hero-btn">
+                Belanja Sekarang →
+            </a>
+
+        </div>
+
+        <div class="hero-decoration">
+            📚
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CATEGORY -->
+
+<section class="section" id="kategori">
+
+    <div class="section-title">
+        <h2>📚 Kategori Buku</h2>
+    </div>
+
+    <div class="categories">
+
+        <div class="category" onclick="filterCategory('Novel')">
+            <div class="category-icon">📖</div>
+            <p>Novel</p>
+        </div>
+
+        <div class="category" onclick="filterCategory('Pendidikan')">
+            <div class="category-icon">🎓</div>
+            <p>Pendidikan</p>
+        </div>
+
+        <div class="category" onclick="filterCategory('Komik')">
+            <div class="category-icon">💬</div>
+            <p>Komik</p>
+        </div>
+
+        <div class="category" onclick="filterCategory('Bisnis')">
+            <div class="category-icon">💼</div>
+            <p>Bisnis</p>
+        </div>
+
+        <div class="category" onclick="filterCategory('Teknologi')">
+            <div class="category-icon">💻</div>
+            <p>Teknologi</p>
+        </div>
+
+        <div class="category" onclick="filterCategory('Self Improvement')">
+            <div class="category-icon">🌱</div>
+            <p>Self Improvement</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FLASH SALE -->
+
+<section class="section">
+
+    <div class="flash-sale">
+
+        <div class="flash-title">
+
+            <h2>🔥 Flash Sale</h2>
+
+            <div class="timer" id="timer">
+                02 : 15 : 32
+            </div>
+
+        </div>
+
+        <div class="product-grid" id="flashProducts"></div>
+
+    </div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section class="section" id="produk">
+
+    <div class="section-title">
+
+        <h2>✨ Rekomendasi Buku</h2>
+
+        <a href="#" onclick="showAllProducts()">
+            Lihat Semua
+        </a>
+
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+</section>
+
+
+<!-- CART -->
+
+<div class="cart-panel" id="cartPanel">
+
+    <div class="cart-header">
+
+        <h2>🛒 Keranjang</h2>
+
+        <button
+            class="close-cart"
+            onclick="closeCart()"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+
+        <div class="total">
+            <span>Total</span>
+            <span id="cartTotal">Rp0</span>
+        </div>
+
+        <button class="checkout" onclick="checkout()">
+            Checkout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATION -->
+
+<div class="notification" id="notification">
+    Buku berhasil ditambahkan ke keranjang 🛒
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div>
+            <h3>📚 BukuKita</h3>
+
+            <p>
+                Toko buku online aesthetic untuk
+                para pecinta buku Indonesia.
+            </p>
+
+            <p>
+                Temukan buku favoritmu dengan mudah.
+            </p>
+        </div>
+
+        <div>
+            <h3>Layanan</h3>
+            <p><a href="#">Pusat Bantuan</a></p>
+            <p><a href="#">Cara Belanja</a></p>
+            <p><a href="#">Pengiriman</a></p>
+            <p><a href="#">Pembayaran</a></p>
+        </div>
+
+        <div>
+            <h3>Informasi</h3>
+            <p><a href="#">Tentang Kami</a></p>
+            <p><a href="#">Kontak</a></p>
+            <p><a href="#">Kebijakan Privasi</a></p>
+            <p><a href="#">Syarat & Ketentuan</a></p>
+        </div>
+
+        <div>
+            <h3>Ikuti Kami</h3>
+            <p>Instagram</p>
+            <p>TikTok</p>
+            <p>WhatsApp</p>
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const products = [
+
+    {
+        id: 1,
+        name: "Laut Bercerita",
+        category: "Novel",
+        price: 98000,
+        oldPrice: 120000,
+        rating: 4.9,
+        sold: 1200,
+        emoji: "📕"
+    },
+
+    {
+        id: 2,
+        name: "Filosofi Teras",
+        category: "Self Improvement",
+        price: 89000,
+        oldPrice: 110000,
+        rating: 4.8,
+        sold: 950,
+        emoji: "📗"
+    },
+
+    {
+        id: 3,
+        name: "Atomic Habits",
+        category: "Self Improvement",
+        price: 105000,
+        oldPrice: 135000,
+        rating: 4.9,
+        sold: 2500,
+        emoji: "📘"
+    },
+
+    {
+        id: 4,
+        name: "Belajar HTML & CSS",
+        category: "Teknologi",
+        price: 75000,
+        oldPrice: 95000,
+        rating: 4.7,
+        sold: 680,
+        emoji: "💻"
+    },
+
+    {
+        id: 5,
+        name: "Pemrograman JavaScript",
+        category: "Teknologi",
+        price: 115000,
+        oldPrice: 145000,
+        rating: 4.8,
+        sold: 870,
+        emoji: "📙"
+    },
+
+    {
+        id: 6,
+        name: "Dasar-Dasar Akuntansi",
+        category: "Pendidikan",
+        price: 85000,
+        oldPrice: 100000,
+        rating: 4.6,
+        sold: 450,
+        emoji: "📒"
+    },
+
+    {
+        id: 7,
+        name: "Komik Petualangan Seru",
+        category: "Komik",
+        price: 55000,
+        oldPrice: 70000,
+        rating: 4.9,
+        sold: 1600,
+        emoji: "📔"
+    },
+
+    {
+        id: 8,
+        name: "Cara Memulai Bisnis",
+        category: "Bisnis",
+        price: 92000,
+        oldPrice: 125000,
+        rating: 4.7,
+        sold: 730,
+        emoji: "📚"
+    },
+
+    {
+        id: 9,
+        name: "Psikologi Uang",
+        category: "Bisnis",
+        price: 99000,
+        oldPrice: 125000,
+        rating: 4.9,
+        sold: 2100,
+        emoji: "📕"
+    },
+
+    {
+        id: 10,
+        name: "Seni Berpikir Positif",
+        category: "Self Improvement",
+        price: 79000,
+        oldPrice: 100000,
+        rating: 4.8,
+        sold: 890,
+        emoji: "📗"
+    }
+
+];
+
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+// FORMAT RUPIAH
+
+function formatRupiah(number) {
+
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        }
+    ).format(number);
+
+}
+
+
+// CREATE PRODUCT
+
+function createProduct(product) {
+
+    return `
+
+        <div class="product">
+
+            <button
+                class="wishlist"
+                onclick="wishlist(this)"
+            >
+                ♡
+            </button>
+
+            <div class="product-image">
+                ${product.emoji}
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div class="rating">
+                    ⭐ ${product.rating}
+                    <span>(${product.sold})</span>
+                </div>
+
+                <div>
+                    <span class="price">
+                        ${formatRupiah(product.price)}
+                    </span>
+
+                    <span class="old-price">
+                        ${formatRupiah(product.oldPrice)}
+                    </span>
+                </div>
+
+                <div class="sold">
+                    Terjual ${product.sold}+
+                </div>
+
+                <button
+                    class="add-cart"
+                    onclick="addToCart(${product.id})"
+                >
+                    + Keranjang
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+// DISPLAY PRODUCTS
+
+function displayProducts(data = products) {
+
+    const grid = document.getElementById("productGrid");
+
+    grid.innerHTML = data
+        .map(product => createProduct(product))
+        .join("");
+
+}
+
+
+// FLASH SALE
+
+function displayFlashSale() {
+
+    const flash = products.slice(0, 5);
+
+    document.getElementById("flashProducts").innerHTML =
+        flash.map(product => createProduct(product)).join("");
+
+}
+
+
+// ADD CART
+
+function addToCart(id) {
+
+    const product = products.find(
+        item => item.id === id
+    );
+
+    const existing = cart.find(
+        item => item.id === id
+    );
+
+    if (existing) {
+
+        existing.qty++;
+
+    } else {
+
+        cart.push({
+            ...product,
+            qty: 1
+        });
+
+    }
+
+    saveCart();
+
+    showNotification(
+        `${product.name} ditambahkan ke keranjang 🛒`
+    );
+
+}
+
+
+// SAVE CART
+
+function saveCart() {
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    updateCart();
+
+}
+
+
+// UPDATE CART
+
+function updateCart() {
+
+    const count = cart.reduce(
+        (total, item) => total + item.qty,
+        0
+    );
+
+    document.getElementById(
+        "cartCount"
+    ).innerText = count;
+
+
+    const container =
+        document.getElementById("cartItems");
+
+
+    if (cart.length === 0) {
+
+        container.innerHTML = `
+            <div style="text-align:center;color:#888;margin-top:50px;">
+                🛒<br><br>
+                Keranjang masih kosong
+            </div>
+        `;
+
+    } else {
+
+        container.innerHTML = cart.map(item => `
+
+            <div class="cart-item">
+
+                <div class="cart-book">
+                    ${item.emoji}
+                </div>
+
+                <div class="cart-info">
+
+                    <h4>
+                        ${item.name}
+                    </h4>
+
+                    <p>
+                        ${formatRupiah(item.price)}
+                    </p>
+
+                    <small>
+                        Jumlah: ${item.qty}
+                    </small>
+
+                </div>
+
+                <button
+                    class="remove"
+                    onclick="removeCart(${item.id})"
+                >
+                    🗑️
+                </button>
+
+            </div>
+
+        `).join("");
+
+    }
+
+
+    const total = cart.reduce(
+        (sum, item) =>
+            sum + item.price * item.qty,
+        0
+    );
+
+
+    document.getElementById(
+        "cartTotal"
+    ).innerText = formatRupiah(total);
+
+}
+
+
+// REMOVE CART
+
+function removeCart(id) {
+
+    cart = cart.filter(
+        item => item.id !== id
+    );
+
+    saveCart();
+
+}
+
+
+// OPEN CART
+
+function openCart() {
+
+    document
+        .getElementById("cartPanel")
+        .classList.add("active");
+
+}
+
+
+// CLOSE CART
+
+function closeCart() {
+
+    document
+        .getElementById("cartPanel")
+        .classList.remove("active");
+
+}
+
+
+// SEARCH
+
+function searchProduct() {
+
+    const keyword =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    const result = products.filter(product =>
+
+        product.name
+        .toLowerCase()
+        .includes(keyword)
+
+        ||
+
+        product.category
+        .toLowerCase()
+        .includes(keyword)
+
+    );
+
+
+    displayProducts(result);
+
+}
+
+
+// FILTER CATEGORY
+
+function filterCategory(category) {
+
+    const result = products.filter(
+        product =>
+            product.category === category
+    );
+
+    displayProducts(result);
+
+    document
+        .getElementById("produk")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+// SHOW ALL
+
+function showAllProducts() {
+
+    displayProducts(products);
+
+}
+
+
+// WISHLIST
+
+function wishlist(button) {
+
+    if (button.innerText === "♡") {
+
+        button.innerText = "♥";
+        button.style.color = "#ff4757";
+
+        showNotification(
+            "Ditambahkan ke wishlist ❤️"
+        );
+
+    } else {
+
+        button.innerText = "♡";
+        button.style.color = "";
+
+    }
+
+}
+
+
+// NOTIFICATION
+
+function showNotification(message) {
+
+    const notification =
+        document.getElementById(
+            "notification"
+        );
+
+    notification.innerText = message;
+
+    notification.classList.add("show");
+
+    setTimeout(() => {
+
+        notification.classList.remove("show");
+
+    }, 2000);
+
+}
+
+
+// DARK MODE
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle("dark");
+
+}
+
+
+// CHECKOUT
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        showNotification(
+            "Keranjang masih kosong!"
+        );
+
+        return;
+
+    }
+
+    alert(
+        "Checkout berhasil dibuka!\\n\\n" +
+        "Untuk website asli, bagian ini dapat " +
+        "dihubungkan dengan sistem pembayaran."
+    );
+
+}
+
+
+// TIMER
+
+let seconds = 2 * 60 * 60 + 15 * 60 + 32;
+
+
+function updateTimer() {
+
+    let h =
+        Math.floor(seconds / 3600);
+
+    let m =
+        Math.floor(
+            (seconds % 3600) / 60
+        );
+
+    let s =
+        seconds % 60;
+
+
+    document.getElementById("timer")
+        .innerText =
+        String(h).padStart(2, "0") +
+        " : " +
+        String(m).padStart(2, "0") +
+        " : " +
+        String(s).padStart(2, "0");
+
+
+    if (seconds > 0) {
+        seconds--;
+    }
+
+}
+
+
+setInterval(updateTimer, 1000);
+
+
+// INITIALIZE
+
+displayProducts();
+
+displayFlashSale();
+
+updateCart();
+
+updateTimer();
+
+</script>
+
+</body>
+</html>
